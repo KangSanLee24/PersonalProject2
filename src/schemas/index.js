@@ -1,9 +1,7 @@
-// /src/schemas/index.js
-
 import mongoose from "mongoose";
 import { MONGO_URL } from "./env.js";
 
-console.log("몽고URL", MONGO_URL); //
+console.log("몽고URL", MONGO_URL);
 const connect = () => {
   mongoose
     .connect(MONGO_URL, {
