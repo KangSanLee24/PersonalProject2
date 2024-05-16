@@ -28,6 +28,7 @@ const ProductsSchema = new mongoose.Schema({
   status: {
     type: String, // 상품의 상태를 나타냅니다.
     required: true, // 필수 항목입니다.
+    enum: ["FOR_SALE", "SOLD_OUT"],
   },
   createdAt: {
     type: Date, // 상품이 생성된 시간을 나타냅니다.
