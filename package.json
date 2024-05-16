@@ -1,0 +1,17 @@
+{
+  "name": "pp2marketplace",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/KangSanLee24/PersonalProject2.git",
+  "author": "이강산 <gangsan1414@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "mongoose": "^8.3.4"
+  }
+}
