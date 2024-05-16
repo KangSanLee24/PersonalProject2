@@ -13,11 +13,7 @@ app.use(express.urlencoded({ extended: true }));
 
 const router = express.Router();
 
-router.get("/", (req, res) => {
-  return res.json({ message: "HI!" });
-});
-
-app.use("/api", [router, productsRouter]);
+app.use("/", [router, productsRouter]);
 
 //에러 처리 미들웨어를 등록한다.
 app.use(ErrorHandlerMiddleware);
