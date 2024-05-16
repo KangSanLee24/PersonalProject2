@@ -1,7 +1,14 @@
 export default (error, req, res, next) => {
-  //Joi 에러
+  //Joi 에러 유효성검사
   if (error.name === "ValidationError") {
     return res.status(400).json({ errorMessage: error.message });
+  } else if (error.name === "CastError") {
+    // /products/:productsId에서 Id부분이 틀리면 나옴.
+    return res
+      .status(404)
+      .json({
+        errorMessage: "존재하지 않는 상품입니다. 상품 id를 확인하세요.",
+      });
   }
   return res
     .status(500)
