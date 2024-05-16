@@ -19,7 +19,7 @@ const ProductsSchema = new mongoose.Schema({
   },
   manager: {
     type: String, // 상품의 카테고리를 나타냅니다.
-    required: true,
+    required: true, // 필수 항목입니다.
   },
   password: {
     type: String, // 상품의 이름을 나타냅니다.
@@ -27,14 +27,14 @@ const ProductsSchema = new mongoose.Schema({
   },
   status: {
     type: String, // 상품의 상태를 나타냅니다.
-    required: true,
+    required: true, // 필수 항목입니다.
   },
   createdAt: {
-    type: Date,
-    required: true,
+    type: Date, // 상품이 생성된 시간을 나타냅니다.
+    required: true, // 필수 항목입니다.
   },
   updateAt: {
-    type: Date,
+    type: Date, // 상품이 수정된 가장 최근 시간을 나타냅니다.
     required: false,
   },
 });
