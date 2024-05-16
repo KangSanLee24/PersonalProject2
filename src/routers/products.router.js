@@ -1,43 +1,59 @@
 import express from "express";
+import Joi from "joi";
 import Products from "../schemas/product.schema.js";
 
 const router = express.Router();
 
+const createdProductsSchema = Joi.object({
+  name: Joi.string().min(1).max(20).required(),
+  description: Joi.string(),
+  manager: Joi.string().min(1).max(20).required(),
+  password: Joi.string()
+    .min(1)
+    .max(20)
+    .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
+    .required(),
+});
+
 // products 상품 등록 API
 router.post("/products", async (req, res, next) => {
-  // 클라이언트로부터 전달받은 데이터를 가져온다.
-  const { name, description, manager, password } = req.body;
+  try {
+    // 클라이언트로부터 전달받은 데이터를 유효성 검사한다.
+    const validation = await createdProductsSchema.validateAsync(req.body);
 
-  // name 중복되지 않았는지 검사한다. 실제로 MongoDB에 데이터를 조회해서, 해당하는 데이터가 MongoDb에 존재하는 지 확인.
-  const products = await Products.find({ name: name }).exec();
-  // .exec() : Promise형태로 반환되기 때문에 사용. 데이터를 생성할 때는 사용이 안되기 때문에, 데이터를 조회할 때 사용한다.
-  // console.log(products);
-  // name이 중복된다면, 에러메시지를 전달한다.
-  if (products.length) {
-    return res
-      .status(400)
-      .json({ success: false, errorMessage: "이미 존재하는 데이터입니다." });
+    const { name, description, manager, password } = validation;
+
+    // name 중복되지 않았는지 검사한다. 실제로 MongoDB에 데이터를 조회해서, 해당하는 데이터가 MongoDb에 존재하는 지 확인.
+    const products = await Products.find({ name: name }).exec();
+    // name이 중복된다면, 에러메시지를 전달한다.
+    if (products.length) {
+      return res
+        .status(400)
+        .json({ success: false, errorMessage: "이미 등록된 상품명입니다." });
+    }
+    const productsMaxOrder = await Products.findOne().sort("-id").exec();
+    const id = productsMaxOrder ? productsMaxOrder.id + 1 : 1;
+
+    // 상품(Products)를 생성한다.
+    const createdProducts = new Products({
+      id: id,
+      name: name,
+      description: description,
+      manager: manager,
+      password: password,
+      status: "FOR_SALE",
+      createdAt: new Date(),
+      updateAt: new Date(),
+    });
+    await createdProducts.save();
+    return res.status(201).json({
+      status: 201,
+      message: "상품 생성에 성공했습니다.",
+      data: createdProducts,
+    });
+  } catch (error) {
+    next(error);
   }
-  const productsMaxOrder = await Products.findOne().sort("-id").exec();
-  const id = productsMaxOrder ? productsMaxOrder.id + 1 : 1;
-
-  // 상품(Products)를 생성한다.
-  const createdProducts = new Products({
-    id: id,
-    name: name,
-    description: description,
-    manager: manager,
-    password: password,
-    status: "FOR_SALE",
-    createdAt: new Date(),
-    updateAt: new Date(),
-  });
-  await createdProducts.save();
-  return res.status(201).json({
-    status: 201,
-    message: "상품 생성에 성공했습니다.",
-    data: createdProducts,
-  });
 });
 
 // products 목록 조회 API - 객체분해, toObject()
