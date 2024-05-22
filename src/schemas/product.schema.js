@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { PRODUCT_STATUS } from "../constants/product.constant";
+import { PRODUCT_STATUS } from "../constants/product.constant.js";
 
 // 상품(goods)에 대한 정보를 나타내는 스키마를 정의합니다.
 const ProductsSchema = new mongoose.Schema(
@@ -7,6 +7,7 @@ const ProductsSchema = new mongoose.Schema(
     name: {
       type: String, // 상품의 이름을 나타냅니다.
       required: true, // 필수 항목입니다.
+      unique: true,
     },
     description: {
       type: String, // 상품의 상세 설명을 나타냅니다.
