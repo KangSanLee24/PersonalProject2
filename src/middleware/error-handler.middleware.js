@@ -1,4 +1,5 @@
-export default (error, req, res, next) => {
+export const errorHandler = (error, req, res, next) => {
+  console.error(err);
   //Joi 에러 유효성검사
   if (error.name === "ValidationError") {
     return res.status(400).json({ errorMessage: error.message });

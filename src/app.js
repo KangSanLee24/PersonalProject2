@@ -2,7 +2,7 @@ import express from "express";
 import { SEVER_PORT } from "./constants/env.constant.js";
 import { productsRouter } from "./routers/products.router.js";
 import { connect } from "./schemas/index.js";
-import ErrorHandlerMiddleware from "./middleware/error-handler.middleware.js";
+import { errorHandler } from "./middleware/error-handler.middleware.js";
 
 const app = express();
 connect(); //mongodb연결
@@ -16,7 +16,7 @@ const router = express.Router();
 app.use("/", [router, productsRouter]);
 
 //에러 처리 미들웨어를 등록한다.
-app.use(ErrorHandlerMiddleware);
+app.use(errorHandler);
 
 app.listen(SEVER_PORT, () => {
   console.log(SEVER_PORT, "포트로 서버가 열렸어요!");
